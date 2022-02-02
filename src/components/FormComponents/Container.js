@@ -15,7 +15,10 @@ const Container = styled.div`
 
   .logo {
     margin-bottom: 25px; 
+    margin-top: 100px;
   }
+
+  overflow-y: scroll;
 `
 
 export default Container;

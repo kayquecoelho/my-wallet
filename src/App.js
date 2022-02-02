@@ -3,6 +3,7 @@ import { useState } from "react";
 import "./style/reset.css";
 
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 export default function App () {
  
@@ -10,7 +11,7 @@ export default function App () {
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />}/>
-      <Route path="/register"/>
+      <Route path="/register" element={<Register />}/>
     </Routes>
     </BrowserRouter>
   )
