@@ -14,9 +14,20 @@ function signIn(body) {
   return promise;
 }
 
+function getTransactions(token) {
+  const promise = axios.get(`${BASE_URL}/transactions`, {
+    headers: {
+      Authorization: `Bearer ${token?.token}`
+    }
+  })
+
+  return promise;
+}
+
 const api = {
   signUp,
-  signIn
+  signIn,
+  getTransactions
 }
 
 export default api;

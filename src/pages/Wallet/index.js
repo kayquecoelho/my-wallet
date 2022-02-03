@@ -1,15 +1,29 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { Button, Container, Form, Input } from "../../components/FormComponents"
-import { ButtonWallet, Navigation, Statement, Title } from "./style";
+import { useState, useContext, useEffect } from "react";
+import AuthContext from "../../contexts/AuthContext";
 
-export default function Wallet(props) {
+import { Button, Container, Form, Input } from "../../components/FormComponents"
+import { ButtonWallet, Navigation, Statement, Title, Subtitle } from "./style";
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
+
+export default function Wallet() {
+  const { token } = useContext(AuthContext);
   const [screen, setScreen] = useState("wallet");
   const [typeOfInput, setTypeOfInput] = useState("");
+  const [transactions, setTransactions] = useState(null);
   const [formData, setFormData] = useState({ 
     value: "",
     description: ""
   });
+  const navigate = useNavigate();
+  console.log(transactions)
+
+  useEffect(() => {
+    const promise = api.getTransactions(token);
+
+    promise.then((response) => setTransactions(response.data));
+    promise.catch(() => navigate("/"))
+  }, []);
 
   function changeToInput(type) {
     setScreen("adicionar");
@@ -54,12 +68,13 @@ export default function Wallet(props) {
   return (
     <Container>
       <Title>
-        <span>Olá, {props.name}</span> 
+        <span>Olá, {token ? token.name: ""}</span> 
         <ion-icon className="logout" name="log-out-outline"/>
       </Title>
 
-      <Statement>
-
+      <Statement transactions={transactions}>
+        {!transactions && <Subtitle>Não há registros de entrada ou saída</Subtitle>}
+        {transactions && "Hello World"}
       </Statement>
 
       <Navigation>

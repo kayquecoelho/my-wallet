@@ -18,13 +18,21 @@ const Title = styled.div`
   }
 `;
 
+const Subtitle = styled.div`
+  color: #868686;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: center;
+`;
+
 const Statement = styled.div`
   width: 100%;
   height: 446px;
 
   display: flex; 
   flex-direction: column;
-  align-items: center;
+
+  ${ (props) => !props.transactions && "justify-content: center;" }
 
   padding: 20px 10px 10px 10px;
 
@@ -75,6 +83,7 @@ const ButtonWallet = styled.button`
 export {
   ButtonWallet,
   Title,
+  Subtitle,
   Navigation,
   Statement
 }; 
