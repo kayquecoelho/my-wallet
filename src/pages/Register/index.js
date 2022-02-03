@@ -4,7 +4,6 @@ import { Container, Form, Input, StyledLink, Button } from "../../components/For
 import Logo from "../../assets/logo.svg";
 import api from "../../services/api";
 
-
 export default function Register () {
   const [formData, setFormData] = useState({
     name: "", 
@@ -30,8 +29,8 @@ export default function Register () {
 
     promise.then(() => navigate("/"));
     promise.catch((error) => alert(error.response.data) )
-    
   }
+  
   return (
     <Container>
       <img className="logo" src={Logo} alt="My Wallet"/>

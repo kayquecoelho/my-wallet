@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Logo from '../../assets/logo.svg';
 import { Container, Form, Input, StyledLink, Button } from '../../components/FormComponents';
+import api from "../../services/api";
 
 export default function Login () {
   const [formData, setFormData] = useState({
@@ -10,7 +11,13 @@ export default function Login () {
 
   function handleSubmit(e){
     e.preventDefault();
+
+    const promise = api.signIn({ ...formData });
+
+    promise.then((response) => console.log(response.data));
+    promise.catch((error) => alert(error.response.data))
   }
+
   function handleChange(e){
     setFormData({...formData, [e.target.name]: e.target.value});
   }
