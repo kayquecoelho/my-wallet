@@ -31,6 +31,7 @@ const Statement = styled.div`
 
   display: flex; 
   flex-direction: column;
+  justify-content: space-between;
 
   ${ (props) => !props.transactions && "justify-content: center;" }
 
@@ -38,6 +39,18 @@ const Statement = styled.div`
 
   background: #FFFFFF;
   border-radius: 5px;
+
+  .transactions {
+    margin-bottom: 25px;
+    overflow: scroll;
+
+    -ms-overflow-style: none;  
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const Navigation = styled.nav`
