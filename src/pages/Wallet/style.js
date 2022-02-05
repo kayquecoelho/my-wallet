@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+const ContainerWallet = styled.div`
+  padding: 0 25px;
+
+  display: flex;
+  flex-direction: column; 
+  
+`
 const Title = styled.div` 
   width: 100%;
 
@@ -54,9 +61,9 @@ const Statement = styled.div`
 `;
 
 const Navigation = styled.nav`
-  width: 100%;
+  max-width: 400px;
 
-  margin-top: 13px;
+  margin: 13px auto;
 
   display: flex;
   justify-content: space-between;
@@ -71,7 +78,8 @@ const ButtonWallet = styled.button`
   align-items: flex-start;
 
   padding: 10px; 
-  margin-bottom: 40px;
+  margin-right: 25px;
+  margin-bottom: 25px;
 
   background-color: #A328D6;
   border-radius: 5px;
@@ -98,5 +106,6 @@ export {
   Title,
   Subtitle,
   Navigation,
-  Statement
+  Statement,
+  ContainerWallet
 }; 

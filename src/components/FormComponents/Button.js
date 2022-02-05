@@ -17,6 +17,8 @@ const Button = styled.button`
   font-size: 20px;
   line-height: 23px;
 
+  ${(props) => props.disabled && "opacity: 0.7;"}
+
   :hover {
     cursor: pointer;
   }

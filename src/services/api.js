@@ -24,10 +24,21 @@ function getTransactions(token) {
   return promise;
 }
 
+function registrateTransaction(token, body){
+  const promise = axios.post(`${BASE_URL}/transactions`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return promise;
+}
+
 const api = {
   signUp,
   signIn,
-  getTransactions
+  getTransactions,
+  registrateTransaction
 }
 
 export default api;

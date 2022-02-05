@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import AuthContext from "../../contexts/AuthContext";
 
-import { Button, Container, Form, Input } from "../../components/FormComponents"
-import { ButtonWallet, Navigation, Statement, Title, Subtitle } from "./style";
+import { Button, Container, Form, Input, Loading } from "../../components/FormComponents"
+import { ButtonWallet, Navigation, Statement, Title, Subtitle, ContainerWallet } from "./style";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -14,17 +14,20 @@ export default function Wallet() {
   const [transactions, setTransactions] = useState(null);
   const [formData, setFormData] = useState({ 
     value: "",
-    description: ""
+    description: "",
   });
   const navigate = useNavigate();
-  console.log(transactions)
-
+  const [disableForm, setDisableForm] = useState(false);
+  const [balance, setBalance] = useState(0);
+  
   useEffect(() => {
     const promise = api.getTransactions(token);
 
-    promise.then((response) => setTransactions(response.data));
+    promise.then((response) => {
+      setTransactions(response.data);
+    });
     promise.catch(() => navigate("/"))
-  }, []);
+  }, [screen]);
 
   function changeToInput(type) {
     setScreen("adicionar");
@@ -37,6 +40,32 @@ export default function Wallet() {
 
   function handleSubmit(e){
     e.preventDefault();
+    setDisableForm(true);
+
+    const isValueANumber = Number(formData.value);
+    if (!isValueANumber || typeof formData.description !== "string"){
+      return alert("Os dados não estão no formato correto");
+    }
+    const body = {
+      ...formData,
+      type: typeOfInput
+    };
+
+    const promise = api.registrateTransaction(token.token, body);
+
+    promise.then(() => {
+      setScreen("wallet");
+      setFormData({ 
+        value: "",
+        description: "",
+      });
+      setDisableForm(false)
+    });
+
+    promise.catch((error) => {
+      alert(error.response.data);
+      setDisableForm(false);
+    })
   }
 
   if (screen !== "wallet") {
@@ -45,29 +74,35 @@ export default function Wallet() {
         <Title>Nova {typeOfInput}</Title>
         <Form onSubmit={handleSubmit}>
           <Input 
-              type="text"
-              placeholder="Nome"
-              name="name"
+              type="number"
+              placeholder="Valor"
+              name="value"
               onChange={handleChange}
               value={formData.value}
               required
+              disabled={disableForm}
           />
           <Input 
               type="text"
               placeholder="Nome"
-              name="name"
+              name="description"
               onChange={handleChange}
               value={formData.description}
               required
+              disabled={disableForm}
           />
-          <Button type="submit">Salvar {typeOfInput}</Button>
+          <Button disabled={disableForm}type="submit">
+            {!disableForm && `Salvar ${typeOfInput}`}
+            {disableForm && <Loading></Loading>}
+            
+          </Button>
         </Form>
       </Container>
     )
   }
 
   return (
-    <Container>
+    <ContainerWallet>
       <Title>
         <span>Olá, {token ? token.name: ""}</span> 
         <ion-icon className="logout" name="log-out-outline"/>
@@ -78,7 +113,7 @@ export default function Wallet() {
         <div className="transactions">
           {transactions && transactions.transactions.map((t) => <Transaction key={t._id} {...t} />)}
         </div>
-        {transactions && <BankBalance></BankBalance>}
+        {transactions && <BankBalance>{balance}</BankBalance>}
       </Statement>
 
       <Navigation>
@@ -93,17 +128,16 @@ export default function Wallet() {
           <span>saída</span>
         </ButtonWallet>
       </Navigation>
-    </Container>
+    </ContainerWallet>
   );
 }
 
-function BankBalance(){
-  const [balance, setBalance] = useState(2500);
-
+function BankBalance({children}){
+  
   return (
     <Balance>
       <span>SALDO</span>
-      <Total balance={balance}>{balance}</Total>
+      <Total balance={children}>{children}</Total>
     </Balance>
   )
 }
@@ -128,6 +162,7 @@ const Total = styled.div`
 function Transaction({ date, description, value, type }){
   const arrDate = date.split("/");
   const formatedDate = `${arrDate[0]}/${arrDate[1]}`;
+  
   return (
     <Operation>
       <Description>
@@ -168,7 +203,9 @@ const Date = styled.time`
   color: #C6C6C6;
   font-size: 16px;
   line-height: 19px;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-right: 10px;
   word-break: keep-all;
 `
