@@ -46,7 +46,7 @@ const Statement = styled.div`
   flex-direction: column;
   justify-content: space-between;
 
-  ${ (props) => !props.transactions && "justify-content: center;" }
+  ${ (props) => props.transactions?.length === 0 && "justify-content: center;" }
 
   padding: 20px 10px 10px 10px;
 
@@ -113,6 +113,8 @@ const ButtonWallet = styled.button`
     font-weight: 700;
     line-height: 20px;
   }
+
+  cursor: pointer;
 `;
 
 export {

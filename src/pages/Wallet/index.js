@@ -11,7 +11,7 @@ export default function Wallet() {
   const { token } = useContext(AuthContext);
   const [screen, setScreen] = useState("wallet");
   const [typeOfInput, setTypeOfInput] = useState("");
-  const [transactions, setTransactions] = useState(null);
+  const [transactions, setTransactions] = useState(undefined);
   const [formData, setFormData] = useState({ 
     value: "",
     description: "",
@@ -96,10 +96,9 @@ export default function Wallet() {
               required
               disabled={disableForm}
           />
-          <Button disabled={disableForm}type="submit">
+          <Button disabled={disableForm} type="submit">
             {!disableForm && `Salvar ${typeOfInput}`}
             {disableForm && <Loading></Loading>}
-            
           </Button>
         </Form>
       </Container>
@@ -115,12 +114,12 @@ export default function Wallet() {
         </div>
       </Title>
 
-      <Statement transactions={transactions}>
-        {!transactions && <Subtitle>Não há registros de entrada ou saída</Subtitle>}
+      <Statement transactions={transactions?.transactions}>
+        {transactions?.transactions.length === 0 && <Subtitle>Não há registros de entrada ou saída</Subtitle>}
         <div className="transactions">
           {transactions && transactions.transactions.map((t) => <Transaction key={t._id} {...t} />)}
         </div>
-        {transactions && <BankBalance balance={balance} />}
+        {transactions?.transactions.length !== 0 && <BankBalance balance={balance} />}
       </Statement>
 
       <Navigation>

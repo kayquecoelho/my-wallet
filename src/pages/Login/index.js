@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 
-import { Container, Form, Input, StyledLink, Button } from '../../components/FormComponents';
+import { Container, Form, Input, StyledLink, Button, Loading } from '../../components/FormComponents';
 import api from "../../services/api";
 import Logo from '../../assets/logo.svg';
 
@@ -13,9 +13,11 @@ export default function Login () {
     password: ""
   });
   const navigate = useNavigate();
+  const [disableForm, setDisableForm] = useState(false);
 
   function handleSubmit(e){
     e.preventDefault();
+    setDisableForm(true);
 
     const promise = api.signIn({ ...formData });
 
@@ -23,7 +25,10 @@ export default function Login () {
       setToken(response.data)
       navigate("/wallet")
     });
-    promise.catch((error) => alert(error.response.data))
+    promise.catch((error) => {
+      alert(error.response.data)
+      setDisableForm(false);
+    })
   }
 
   function handleChange(e){
@@ -40,6 +45,7 @@ export default function Login () {
           name="email"
           onChange={handleChange}
           value={formData.email}
+          disabled={disableForm}
           required
         />
         <Input
@@ -48,9 +54,13 @@ export default function Login () {
           name="password"
           onChange={handleChange}
           value={formData.password}
+          disabled={disableForm}
           required
         />
-        <Button>Entrar</Button>
+        <Button type="submit" disabled={disableForm}>
+          {!disableForm && "Entrar"}
+          {disableForm && <Loading></Loading>}
+        </Button>
       </Form>
 
       <StyledLink to="/register">

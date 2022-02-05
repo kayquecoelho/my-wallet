@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Form, Input, StyledLink, Button } from "../../components/FormComponents";
+import { Container, Form, Input, StyledLink, Button, Loading } from "../../components/FormComponents";
 import Logo from "../../assets/logo.svg";
 import api from "../../services/api";
 
@@ -12,9 +12,10 @@ export default function Register () {
     confirmPassword: ""
   });
   const navigate = useNavigate();
+  const [disableForm, setDisableForm] = useState(false);
 
   function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value});
   }
 
   function handleSubmit(e) {
@@ -23,12 +24,16 @@ export default function Register () {
     if (formData.password !== formData.confirmPassword){
       return alert("As senhas não coincidem");
     }
+    setDisableForm(true);
     delete formData.confirmPassword;
 
     const promise = api.signUp(formData);
 
     promise.then(() => navigate("/"));
-    promise.catch((error) => alert(error.response.data) )
+    promise.catch((error) => {
+      alert(error.response.data);
+      setDisableForm(false);
+    });
   }
   
   return (
@@ -42,6 +47,7 @@ export default function Register () {
             name="name"
             onChange={handleChange}
             value={formData.name}
+            disabled={setDisableForm}
             required
         />
         <Input 
@@ -50,6 +56,7 @@ export default function Register () {
             name="email"
             onChange={handleChange}
             value={formData.email}
+            disabled={setDisableForm}
             required
         />
         <Input 
@@ -58,6 +65,7 @@ export default function Register () {
             name="password"
             onChange={handleChange}
             value={formData.password}
+            disabled={setDisableForm}
             required
         />
         <Input 
@@ -66,9 +74,13 @@ export default function Register () {
             name="confirmPassword"
             onChange={handleChange}
             value={formData.confirmPassword}
+            disabled={setDisableForm}
             required
         />
-        <Button type="submit">Cadastrar</Button>
+        <Button type="submit" disabled={disableForm}>
+          {!disableForm && "Cadastrar"}
+          {disableForm && <Loading></Loading>}
+        </Button>
       </Form>
 
       <StyledLink to="/">
