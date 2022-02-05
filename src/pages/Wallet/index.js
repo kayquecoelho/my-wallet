@@ -1,11 +1,11 @@
 import { useState, useContext, useEffect } from "react";
-import AuthContext from "../../contexts/AuthContext";
-
-import { Button, Container, Form, Input, Loading } from "../../components/FormComponents"
-import { ButtonWallet, Navigation, Statement, Title, Subtitle, ContainerWallet } from "./style";
-import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import AuthContext from "../../contexts/AuthContext";
+import api from "../../services/api";
+
+import { ButtonWallet, Navigation, Statement, Title, Subtitle, ContainerWallet } from "./style";
+import { Button, Container, Form, Input, Loading } from "../../components/FormComponents"
+import { BankBalance, Transaction } from "./Statement";
 
 export default function Wallet() {
   const { token } = useContext(AuthContext);
@@ -25,6 +25,11 @@ export default function Wallet() {
 
     promise.then((response) => {
       setTransactions(response.data);
+      const deficit = response.data.transactions.filter(res => res.type === "saída");
+      const superavit = response.data.transactions.filter(res => res.type === "entrada");
+      const balanceBank = calculateBalance(deficit, superavit);
+    
+      setBalance(balanceBank);
     });
     promise.catch(() => navigate("/"))
   }, [screen]);
@@ -113,7 +118,7 @@ export default function Wallet() {
         <div className="transactions">
           {transactions && transactions.transactions.map((t) => <Transaction key={t._id} {...t} />)}
         </div>
-        {transactions && <BankBalance>{balance}</BankBalance>}
+        {transactions && <BankBalance balance={balance} />}
       </Statement>
 
       <Navigation>
@@ -132,85 +137,17 @@ export default function Wallet() {
   );
 }
 
-function BankBalance({children}){
-  
-  return (
-    <Balance>
-      <span>SALDO</span>
-      <Total balance={children}>{children}</Total>
-    </Balance>
-  )
-}
-const Balance = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  font-size: 17px;
-  line-height: 20px;
-  
-  span {
-    color: #000000;
-    font-weight: 700;
+function calculateBalance(deficit, superavit) {
+  let totalDeficit = 0;
+  for (let i = 0; i < deficit.length; i++) {
+    totalDeficit += Number(deficit[i].value);
   }
-`
-const Total = styled.div`
-  text-align: right;
-  color: ${(props) => props.balance >= 0 ? "#03AC00": "#C70000"};
-`
-function Transaction({ date, description, value, type }){
-  const arrDate = date.split("/");
-  const formatedDate = `${arrDate[0]}/${arrDate[1]}`;
-  
-  return (
-    <Operation>
-      <Description>
-        <Date>{formatedDate}</Date>
-        <Name>{description}</Name>
-      </Description>
-      <Value type={type}>
-        {value}
-      </Value>
-    </Operation>
-  )
-}
 
-const Operation = styled.div`
-  width: 100%;
+  let totalSuperavit = 0;
+  for (let i = 0; i < superavit.length; i++) {
+    totalSuperavit += Number(superavit[i].value);
+  }
+  const balanceBank = (totalSuperavit - totalDeficit).toFixed(2);
 
-  display: flex; 
-  justify-content: space-between;
-  align-items: center;
-
-  margin-bottom: 15px;
-`
-
-const Description = styled.div`
-  display: flex;
-  align-items: center;
-
-  margin-right: 35px;
-  word-break: break-all;
-`
-const Value = styled.div`
-  font-size: 16px;
-  line-height: 19px;
-  text-align: right;
-  color: ${(props) => props.type === "entrada"? "#03AC00": "#C70000"};
-`
-const Date = styled.time`
-  color: #C6C6C6;
-  font-size: 16px;
-  line-height: 19px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
-  word-break: keep-all;
-`
-const Name = styled.span`
-  color: #000000;
-  font-size: 16px;
-  line-height: 19px;
-`
+  return balanceBank;
+} 

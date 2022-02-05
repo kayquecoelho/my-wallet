@@ -5,7 +5,8 @@ const ContainerWallet = styled.div`
 
   display: flex;
   flex-direction: column; 
-  
+  justify-content: center;
+  align-items: center;
 `
 const Title = styled.div` 
   width: 100%;
@@ -61,7 +62,7 @@ const Statement = styled.div`
 `;
 
 const Navigation = styled.nav`
-  max-width: 400px;
+  width: 100%;
 
   margin: 13px auto;
 
@@ -78,7 +79,7 @@ const ButtonWallet = styled.button`
   align-items: flex-start;
 
   padding: 10px; 
-  margin-right: 25px;
+  
   margin-bottom: 25px;
 
   background-color: #A328D6;
