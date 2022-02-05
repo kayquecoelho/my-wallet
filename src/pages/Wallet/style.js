@@ -5,7 +5,6 @@ const ContainerWallet = styled.div`
 
   display: flex;
   flex-direction: column; 
-  justify-content: center;
   align-items: center;
 `
 const Title = styled.div` 
@@ -14,15 +13,21 @@ const Title = styled.div`
   margin: 25px 0 20px 0;
 
   display: flex; 
-  justify-content: space-between;
+  justify-content: center;
 
   color: #FFFFFF;
   font-size: 26px;
   font-weight: 700;
   line-height: 31px;
 
-  span {
-    margin-right: 25px;
+  .username {
+    width: 100%;
+    display: flex; 
+    justify-content: space-between;
+
+    span {
+      margin-right: 25px;
+    }
   }
 `;
 
@@ -59,15 +64,23 @@ const Statement = styled.div`
       display: none;
     }
   }
+
+  @media screen and (min-width: 500px) {
+    width: 375px;
+  }
 `;
 
 const Navigation = styled.nav`
   width: 100%;
 
-  margin: 13px auto;
+  margin-top: 13px;
 
   display: flex;
   justify-content: space-between;
+
+  @media screen and (min-width: 450px) {
+    width: 335px;
+  }
 `;
 
 const ButtonWallet = styled.button`

@@ -45,12 +45,12 @@ export default function Wallet() {
 
   function handleSubmit(e){
     e.preventDefault();
-    setDisableForm(true);
-
     const isValueANumber = Number(formData.value);
-    if (!isValueANumber || typeof formData.description !== "string"){
+    if (!isValueANumber || typeof formData.description !== "string" || isValueANumber < 0){
       return alert("Os dados não estão no formato correto");
     }
+    setDisableForm(true);
+
     const body = {
       ...formData,
       type: typeOfInput
@@ -109,8 +109,10 @@ export default function Wallet() {
   return (
     <ContainerWallet>
       <Title>
-        <span>Olá, {token ? token.name: ""}</span> 
-        <ion-icon className="logout" name="log-out-outline"/>
+        <div className="username">
+          <span>Olá, {token ? token.name: ""}</span> 
+          <ion-icon className="logout" name="log-out-outline"/>
+        </div>
       </Title>
 
       <Statement transactions={transactions}>
