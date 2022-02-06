@@ -19,6 +19,7 @@ export default function Wallet() {
   const navigate = useNavigate();
   const [disableForm, setDisableForm] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [isDeleted, setIsDeleted] = useState(false);
   
   useEffect(() => {
     const promise = api.getTransactions(token);
@@ -32,7 +33,7 @@ export default function Wallet() {
       setBalance(balanceBank);
     });
     promise.catch(() => navigate("/"))
-  }, [screen]);
+  }, [screen, isDeleted]);
 
   function changeToInput(type) {
     setScreen("adicionar");
@@ -116,9 +117,13 @@ export default function Wallet() {
 
       <Statement transactions={transactions?.transactions}>
         {transactions?.transactions.length === 0 && <Subtitle>Não há registros de entrada ou saída</Subtitle>}
+
         <div className="transactions">
-          {transactions && transactions.transactions.map((t) => <Transaction key={t._id} {...t} />)}
+          {transactions && transactions.transactions.map((t) => (
+            <Transaction key={t._id} {...t} setIsDeleted={setIsDeleted} isDeleted={isDeleted}/>
+          ))}
         </div>
+
         {transactions?.transactions.length !== 0 && <BankBalance balance={balance} />}
       </Statement>
 

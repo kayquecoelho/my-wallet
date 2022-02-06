@@ -43,6 +43,22 @@ const Value = styled.div`
   line-height: 19px;
   text-align: right;
   color: ${(props) => props.type === "entrada" ? "#03AC00": "#C70000"};
+
+  .delete {
+    width: 10px;
+    height: 8px;
+
+    color: #C6C6C6;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+
+    background-color: inherit;
+    border: none;
+
+    margin-right: 5px;
+    cursor: pointer;
+  }
 `;
 const Date = styled.time`
   color: #C6C6C6;

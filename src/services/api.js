@@ -34,11 +34,22 @@ function registrateTransaction(token, body){
   return promise;
 }
 
+function deleteTransaction (token, id) {
+  const promise = axios.delete(`${BASE_URL}/transactions/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return promise;
+}
+
 const api = {
   signUp,
   signIn,
   getTransactions,
-  registrateTransaction
+  registrateTransaction,
+  deleteTransaction
 }
 
 export default api;
