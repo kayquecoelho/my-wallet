@@ -20,6 +20,7 @@ export default function Wallet() {
   const [disableForm, setDisableForm] = useState(false);
   const [balance, setBalance] = useState(0);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [idToUpdate, setIdToUpdate] = useState("");
   
   useEffect(() => {
     const promise = api.getTransactions(token);
@@ -36,7 +37,7 @@ export default function Wallet() {
   }, [screen, isDeleted]);
 
   function changeToInput(type) {
-    setScreen("adicionar");
+    setScreen("add");
     setTypeOfInput(type);
   }
 
@@ -44,7 +45,7 @@ export default function Wallet() {
     setFormData({ ...formData, [e.target.name]: e.target.value});
   }
 
-  function handleSubmit(e){
+  async function handleSubmit(e){
     e.preventDefault();
     const isValueANumber = Number(formData.value);
     if (!isValueANumber || typeof formData.description !== "string" || isValueANumber < 0){
@@ -52,32 +53,40 @@ export default function Wallet() {
     }
     setDisableForm(true);
 
-    const body = {
-      ...formData,
-      type: typeOfInput
-    };
+    try {
+        if (screen === "add"){
+          const body = {
+            ...formData,
+            type: typeOfInput
+          };
+      
+          await api.registrateTransaction(token.token, body);
+        } 
+        
+        if (screen === "update") {
+          await api.updateTransaction(token.token, idToUpdate, formData);
+        }
 
-    const promise = api.registrateTransaction(token.token, body);
+        setScreen("wallet");
+        setFormData({ 
+          value: "",
+          description: "",
+        });
+        setDisableForm(false);
 
-    promise.then(() => {
-      setScreen("wallet");
-      setFormData({ 
-        value: "",
-        description: "",
-      });
-      setDisableForm(false)
-    });
-
-    promise.catch((error) => {
-      alert(error.response.data);
-      setDisableForm(false);
-    })
+    } catch (error) {
+        alert(error.response.data);
+        setDisableForm(false);
+    }
   }
 
   if (screen !== "wallet") {
     return (
       <Container>
-        <Title>Nova {typeOfInput}</Title>
+        <Title>
+          { screen === "add" && `Nova ${typeOfInput}`}
+          { screen === "update" && `Editar ${typeOfInput}`}
+        </Title>
         <Form onSubmit={handleSubmit}>
           <Input 
               type="number"
@@ -98,7 +107,8 @@ export default function Wallet() {
               disabled={disableForm}
           />
           <Button disabled={disableForm} type="submit">
-            {!disableForm && `Salvar ${typeOfInput}`}
+            {(!disableForm && screen === "add") && `Salvar ${typeOfInput}`}
+            {(!disableForm && screen === "update") && `Atualizar ${typeOfInput}`}
             {disableForm && <Loading></Loading>}
           </Button>
         </Form>
@@ -120,7 +130,16 @@ export default function Wallet() {
 
         <div className="transactions">
           {transactions && transactions.transactions.map((t) => (
-            <Transaction key={t._id} {...t} setIsDeleted={setIsDeleted} isDeleted={isDeleted}/>
+            <Transaction 
+              key={t._id} 
+              {...t} 
+              setIsDeleted={setIsDeleted} 
+              isDeleted={isDeleted} 
+              setFormData={setFormData} 
+              setScreen={setScreen}
+              setTypeOfInput={setTypeOfInput}
+              setIdToUpdate={setIdToUpdate}
+            />
           ))}
         </div>
 

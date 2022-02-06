@@ -44,12 +44,23 @@ function deleteTransaction (token, id) {
   return promise;
 }
 
+function updateTransaction(token, id, body) {
+  const promise = axios.put(`${BASE_URL}/transactions/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return promise;
+}
+
 const api = {
   signUp,
   signIn,
   getTransactions,
   registrateTransaction,
-  deleteTransaction
+  deleteTransaction, 
+  updateTransaction
 }
 
 export default api;

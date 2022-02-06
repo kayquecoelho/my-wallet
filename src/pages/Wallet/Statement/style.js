@@ -34,7 +34,7 @@ const Operation = styled.div`
 const Description = styled.div`
   display: flex;
   align-items: center;
-
+  cursor: pointer;
   margin-right: 35px;
   word-break: break-all;
 `;

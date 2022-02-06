@@ -10,7 +10,6 @@ import AuthContext from "./contexts/AuthContext";
 export default function App() {
   const [token, setToken] = useState();
 
-  console.log(token)
   return (
    <AuthContext.Provider value={{ token, setToken }}>
       <BrowserRouter>
