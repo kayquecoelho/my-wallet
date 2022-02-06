@@ -62,7 +62,7 @@ export default function Wallet() {
       
           await api.registrateTransaction(token.token, body);
         } 
-        
+
         if (screen === "update") {
           await api.updateTransaction(token.token, idToUpdate, formData);
         }
@@ -121,7 +121,12 @@ export default function Wallet() {
       <Title>
         <div className="username">
           <span>Olá, {token ? token.name: ""}</span> 
-          <ion-icon className="logout" name="log-out-outline"/>
+          <button className="logout" onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/")
+          }}>
+            <ion-icon className="logout" name="log-out-outline"/>
+          </button>
         </div>
       </Title>
 

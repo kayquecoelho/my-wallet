@@ -29,6 +29,17 @@ const Title = styled.div`
       margin-right: 25px;
     }
   }
+
+  .logout {
+    cursor: pointer;
+    
+    background-color: inherit;
+    border: none;
+    ion-icon {
+      color: #FFFFFF;
+      font-size: 25px;
+    }
+  }
 `;
 
 const Subtitle = styled.div`
@@ -40,7 +51,8 @@ const Subtitle = styled.div`
 
 const Statement = styled.div`
   width: 100%;
-  height: 446px;
+  min-height: 360px;
+  max-height: 446px;
 
   display: flex; 
   flex-direction: column;
@@ -66,7 +78,7 @@ const Statement = styled.div`
   }
 
   @media screen and (min-width: 500px) {
-    width: 375px;
+    width: 335px;
   }
 `;
 
@@ -100,6 +112,7 @@ const ButtonWallet = styled.button`
   border: none;
 
   color: #FFFFFF;
+  cursor: pointer;
 
   ion-icon {
     font-size: 25px;
@@ -114,7 +127,16 @@ const ButtonWallet = styled.button`
     line-height: 20px;
   }
 
-  cursor: pointer;
+  @media screen and (max-width: 360px){
+    width: 120px;
+    height: 110px;
+
+    ion-icon {
+      font-size: 25px;
+      margin-bottom: 20px;
+    }
+  }
+
 `;
 
 export {

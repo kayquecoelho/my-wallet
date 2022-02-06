@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 
@@ -7,13 +7,21 @@ import api from "../../services/api";
 import Logo from '../../assets/logo.svg';
 
 export default function Login () {
-  const { setToken } = useContext(AuthContext);
+  const { setAndPersistToken, setToken } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
-  const navigate = useNavigate();
   const [disableForm, setDisableForm] = useState(false);
+  const navigate = useNavigate();
+  const localData = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (localData) {
+      setToken(JSON.parse(localData));
+      navigate("/wallet");
+    }
+  }, []);
 
   function handleSubmit(e){
     e.preventDefault();
@@ -22,11 +30,11 @@ export default function Login () {
     const promise = api.signIn({ ...formData });
 
     promise.then((response) => {
-      setToken(response.data)
-      navigate("/wallet")
+      setAndPersistToken(response.data);
+      navigate("/wallet");
     });
     promise.catch((error) => {
-      alert(error.response.data)
+      alert(error.response.data);
       setDisableForm(false);
     })
   }
