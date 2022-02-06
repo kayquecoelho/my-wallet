@@ -8,7 +8,7 @@ const Balance = styled.div`
 
   font-size: 17px;
   line-height: 20px;
-  
+
   span {
     color: #000000;
     font-weight: 700;
@@ -24,7 +24,7 @@ const Total = styled.div`
 const Operation = styled.div`
   width: 100%;
 
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   align-items: center;
 
@@ -42,13 +42,13 @@ const Value = styled.div`
   font-size: 16px;
   line-height: 19px;
   text-align: right;
-  color: ${(props) => props.type === "entrada" ? "#03AC00": "#C70000"};
+  color: ${(props) => (props.type === "entrada" ? "#03AC00" : "#C70000")};
 
   .delete {
     width: 10px;
     height: 8px;
 
-    color: #C6C6C6;
+    color: #c6c6c6;
     font-size: 16px;
     line-height: 19px;
     text-align: center;
@@ -61,7 +61,7 @@ const Value = styled.div`
   }
 `;
 const Date = styled.time`
-  color: #C6C6C6;
+  color: #c6c6c6;
   font-size: 16px;
   line-height: 19px;
   display: flex;
@@ -76,12 +76,4 @@ const Name = styled.span`
   line-height: 19px;
 `;
 
-export {
-  Name, 
-  Date,
-  Value,
-  Description,
-  Balance,
-  Total,
-  Operation
-};
+export { Name, Date, Value, Description, Balance, Total, Operation };

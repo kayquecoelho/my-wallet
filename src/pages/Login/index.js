@@ -2,15 +2,15 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 
-import { Container, Form, Input, StyledLink, Button, Loading } from '../../components/FormComponents';
+import { Container, Form, Input, StyledLink, Button, Loading } from "../../components/FormComponents";
 import api from "../../services/api";
-import Logo from '../../assets/logo.svg';
+import Logo from "../../assets/logo.svg";
 
-export default function Login () {
+export default function Login() {
   const { setAndPersistToken, setToken } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
+    password: "",
   });
   const [disableForm, setDisableForm] = useState(false);
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function Login () {
     }
   }, []);
 
-  function handleSubmit(e){
+  function handleSubmit(e) {
     e.preventDefault();
     setDisableForm(true);
 
@@ -36,18 +36,18 @@ export default function Login () {
     promise.catch((error) => {
       alert(error.response.data);
       setDisableForm(false);
-    })
+    });
   }
 
-  function handleChange(e){
-    setFormData({...formData, [e.target.name]: e.target.value});
+  function handleChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   return (
     <Container>
       <img className="logo" src={Logo} alt="MyWallet" />
       <Form onSubmit={handleSubmit}>
-        <Input 
+        <Input
           type="email"
           placeholder="Email"
           name="email"
@@ -71,9 +71,7 @@ export default function Login () {
         </Button>
       </Form>
 
-      <StyledLink to="/register">
-        Primeira vez? Cadastre-se!
-      </StyledLink>
+      <StyledLink to="/register">Primeira vez? Cadastre-se!</StyledLink>
     </Container>
-  )
+  );
 }

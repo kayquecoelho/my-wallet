@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://backend-my-wallet-kayque.herokuapp.com/";
+const BASE_URL = "https://backend-my-wallet-kayque.herokuapp.com";
 
 function signUp(body) {
   const promise = axios.post(`${BASE_URL}/sign-up`, body);

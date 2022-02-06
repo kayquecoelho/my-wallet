@@ -6,14 +6,14 @@ const Container = styled.div`
   padding: 0 25px;
 
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
   .logo {
-    margin-bottom: 25px; 
+    margin-bottom: 25px;
     margin-top: 120px;
   }
-`
+`;
 
 export default Container;

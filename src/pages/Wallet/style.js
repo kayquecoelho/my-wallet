@@ -4,25 +4,26 @@ const ContainerWallet = styled.div`
   padding: 0 25px;
 
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
-`
-const Title = styled.div` 
+`;
+
+const Title = styled.div`
   width: 100%;
 
   margin: 25px 0 20px 0;
 
-  display: flex; 
+  display: flex;
   justify-content: center;
 
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 26px;
   font-weight: 700;
   line-height: 31px;
 
   .username {
     width: 100%;
-    display: flex; 
+    display: flex;
     justify-content: space-between;
 
     span {
@@ -32,11 +33,11 @@ const Title = styled.div`
 
   .logout {
     cursor: pointer;
-    
+
     background-color: inherit;
     border: none;
     ion-icon {
-      color: #FFFFFF;
+      color: #ffffff;
       font-size: 25px;
     }
   }
@@ -54,22 +55,22 @@ const Statement = styled.div`
   min-height: 360px;
   max-height: 446px;
 
-  display: flex; 
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  ${ (props) => props.transactions?.length === 0 && "justify-content: center;" }
+  ${(props) => props.transactions?.length === 0 && "justify-content: center;"}
 
   padding: 20px 10px 10px 10px;
 
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 5px;
 
   .transactions {
     margin-bottom: 25px;
     overflow: scroll;
 
-    -ms-overflow-style: none;  
+    -ms-overflow-style: none;
     scrollbar-width: none;
 
     ::-webkit-scrollbar {
@@ -103,15 +104,15 @@ const ButtonWallet = styled.button`
   flex-direction: column;
   align-items: flex-start;
 
-  padding: 10px; 
-  
+  padding: 10px;
+
   margin-bottom: 25px;
 
-  background-color: #A328D6;
+  background-color: #a328d6;
   border-radius: 5px;
   border: none;
 
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
 
   ion-icon {
@@ -127,7 +128,7 @@ const ButtonWallet = styled.button`
     line-height: 20px;
   }
 
-  @media screen and (max-width: 360px){
+  @media screen and (max-width: 360px) {
     width: 120px;
     height: 110px;
 
@@ -136,7 +137,6 @@ const ButtonWallet = styled.button`
       margin-bottom: 20px;
     }
   }
-
 `;
 
 export {
@@ -145,5 +145,5 @@ export {
   Subtitle,
   Navigation,
   Statement,
-  ContainerWallet
-}; 
+  ContainerWallet,
+};

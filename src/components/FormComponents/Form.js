@@ -6,6 +6,6 @@ const Form = styled.form`
   gap: 15px;
 
   margin-bottom: 35px;
-`
+`;
 
 export default Form;

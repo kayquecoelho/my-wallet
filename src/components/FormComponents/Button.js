@@ -4,7 +4,7 @@ const Button = styled.button`
   width: 330px;
   height: 46px;
 
-  background-color: #A328D6;
+  background-color: #a328d6;
   border-radius: 5px;
   border: none;
 
@@ -12,7 +12,7 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
 
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 700;
   font-size: 20px;
   line-height: 23px;
@@ -22,6 +22,6 @@ const Button = styled.button`
   :hover {
     cursor: pointer;
   }
-`
+`;
 
 export default Button;

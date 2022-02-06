@@ -6,7 +6,7 @@ const Input = styled.input`
 
   padding: 15px;
 
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 5px;
   border: none;
 
@@ -19,6 +19,6 @@ const Input = styled.input`
     font-size: 20px;
     line-height: 23px;
   }
-`
+`;
 
 export default Input;

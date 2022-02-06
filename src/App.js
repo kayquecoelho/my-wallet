@@ -18,12 +18,12 @@ export default function App() {
   }, []);
 
   function setAndPersistToken(token) {
-		setToken(token);
-		localStorage.setItem("token", JSON.stringify(token));
-	}
+    setToken(token);
+    localStorage.setItem("token", JSON.stringify(token));
+  }
 
   return (
-   <AuthContext.Provider value={{ token, setToken, setAndPersistToken }}>
+    <AuthContext.Provider value={{ token, setToken, setAndPersistToken }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -31,6 +31,6 @@ export default function App() {
           <Route path="/wallet" element={<Wallet />} />
         </Routes>
       </BrowserRouter>
-   </AuthContext.Provider>
+    </AuthContext.Provider>
   );
 }

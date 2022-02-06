@@ -4,7 +4,7 @@ import api from "../../../services/api";
 
 import { Balance, Date, Description, Name, Operation, Total, Value } from "./style";
 
-export function BankBalance({ balance }){
+export function BankBalance({ balance }) {
   const title = balance.toString().replace(".", ",");
   return (
     <Balance>
@@ -14,25 +14,27 @@ export function BankBalance({ balance }){
   );
 }
 
-export function Transaction({ 
-  date, 
-  description, 
-  value, 
-  type, 
-  _id, 
-  setIsDeleted, 
-  isDeleted, 
-  setFormData, 
-  setScreen, 
+export function Transaction({
+  date,
+  description,
+  value,
+  type,
+  _id,
+  setIsDeleted,
+  isDeleted,
+  setFormData,
+  setScreen,
   setTypeOfInput,
-  setIdToUpdate
+  setIdToUpdate,
 }) {
   const arrDate = date.split("/");
   const { token } = useContext(AuthContext);
   const formatedDate = `${arrDate[0]}/${arrDate[1]}`;
-  
-  async function requestToDelete(id) { 
-    const wantToDelete = window.confirm("Tem certeza que deseja deletar a transação?")
+
+  async function requestToDelete(id) {
+    const wantToDelete = window.confirm(
+      "Tem certeza que deseja deletar a transação?"
+    );
     if (wantToDelete) {
       try {
         await api.deleteTransaction(token.token, id);
@@ -43,10 +45,10 @@ export function Transaction({
     }
   }
 
-  function updateOperation(id){
+  function updateOperation(id) {
     setFormData({
       value,
-      description
+      description,
     });
     setScreen("update");
     setTypeOfInput(type);
@@ -54,13 +56,13 @@ export function Transaction({
   }
 
   return (
-    <Operation >
+    <Operation>
       <Description onClick={() => updateOperation(_id)}>
         <Date>{formatedDate}</Date>
         <Name>{description}</Name>
       </Description>
       <Value type={type}>
-        {value.replace(".",",")}
+        {value.replace(".", ",")}
         <button className="delete" onClick={() => requestToDelete(_id)}>
           X
         </button>
