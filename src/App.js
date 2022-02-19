@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./style/reset.css";
 
 import Login from "./pages/Login";
@@ -8,14 +8,8 @@ import Wallet from "./pages/Wallet";
 import AuthContext from "./contexts/AuthContext";
 
 export default function App() {
-  const tokenOnLocalStorage = localStorage.getItem("token");
-  const [token, setToken] = useState();
-
-  useEffect(() => {
-    if (tokenOnLocalStorage) {
-      setToken(JSON.parse(tokenOnLocalStorage));
-    }
-  }, []);
+  const localToken = JSON.parse(localStorage.getItem("token"));
+  const [token, setToken] = useState(localToken);
 
   function setAndPersistToken(token) {
     setToken(token);

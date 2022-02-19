@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
+import Swal from "sweetalert2";
+
 import { Container, Form,Input, StyledLink, Button, Loading } from "../../components/FormComponents";
 import Logo from "../../assets/logo.svg";
-import api from "../../services/api";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,18 @@ export default function Register() {
   const navigate = useNavigate();
   const [disableForm, setDisableForm] = useState(false);
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-center',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
@@ -22,16 +36,41 @@ export default function Register() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      return alert("As senhas não coincidem");
+      return Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'As senhas não coincidem',
+      });
     }
+
     setDisableForm(true);
-    delete formData.confirmPassword;
+    const body = {...formData};
+    delete body.confirmPassword;
 
-    const promise = api.signUp(formData);
+    const promise = api.signUp(body);
 
-    promise.then(() => navigate("/"));
-    promise.catch((error) => {
-      alert(error.response.data);
+    promise.then(() => {
+      Toast.fire({
+        icon: 'success',
+        title: 'Cadastro realizado!'
+      })
+      navigate("/");
+    });
+    promise.catch(({ response }) => {
+      if (response.status === 422) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Formato Inválido!',
+          text: 'Nome deve ter pelo menos 3 caracteres, sem números. A senha deve ter pelo menos 3 caracteres',
+        })
+      } else if (response.status === 409) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Usuário já existe',
+        })
+      }
+      
       setDisableForm(false);
     });
   }
@@ -47,7 +86,9 @@ export default function Register() {
           name="name"
           onChange={handleChange}
           value={formData.name}
-          disabled={setDisableForm}
+          disabled={disableForm}
+          autoComplete="off"
+          autoFocus
           required
         />
         <Input
@@ -56,7 +97,8 @@ export default function Register() {
           name="email"
           onChange={handleChange}
           value={formData.email}
-          disabled={setDisableForm}
+          disabled={disableForm}
+          autoComplete="off"
           required
         />
         <Input
@@ -65,7 +107,8 @@ export default function Register() {
           name="password"
           onChange={handleChange}
           value={formData.password}
-          disabled={setDisableForm}
+          disabled={disableForm}
+          autoComplete="off"
           required
         />
         <Input
@@ -74,12 +117,12 @@ export default function Register() {
           name="confirmPassword"
           onChange={handleChange}
           value={formData.confirmPassword}
-          disabled={setDisableForm}
+          disabled={disableForm}
+          autoComplete="off"
           required
         />
         <Button type="submit" disabled={disableForm}>
-          {!disableForm && "Cadastrar"}
-          {disableForm && <Loading></Loading>}
+          {disableForm ? <Loading /> : "Cadastrar"}
         </Button>
       </Form>
 

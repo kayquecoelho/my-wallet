@@ -2,29 +2,17 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../contexts/AuthContext";
 import api from "../../services/api";
+import Swal from "sweetalert2";
 
-import {
-  ButtonWallet,
-  Navigation,
-  Statement,
-  Title,
-  Subtitle,
-  ContainerWallet,
-} from "./style";
-import {
-  Button,
-  Container,
-  Form,
-  Input,
-  Loading,
-} from "../../components/FormComponents";
+import { ButtonWallet, Navigation, Statement, Title, Subtitle, ContainerWallet } from "./style";
+import { Button, Container, Form, Input, Loading } from "../../components/FormComponents";
 import { BankBalance, Transaction } from "./Statement";
 
 export default function Wallet() {
   const { token } = useContext(AuthContext);
   const [screen, setScreen] = useState("wallet");
   const [typeOfInput, setTypeOfInput] = useState("");
-  const [transactions, setTransactions] = useState(undefined);
+  const [transactions, setTransactions] = useState(null);
   const [formData, setFormData] = useState({
     value: "",
     description: "",
@@ -51,7 +39,8 @@ export default function Wallet() {
       setBalance(balanceBank);
     });
     promise.catch(() => navigate("/"));
-  }, [screen, isDeleted]);
+    
+  }, [screen, isDeleted, navigate, token]);
 
   function changeToInput(type) {
     setScreen("add");
@@ -65,13 +54,12 @@ export default function Wallet() {
   async function handleSubmit(e) {
     e.preventDefault();
     const isValueANumber = Number(formData.value);
-    if (
-      !isValueANumber ||
-      typeof formData.description !== "string" ||
-      isValueANumber < 0
-    ) {
-      return alert("Os dados não estão no formato correto");
+    const isFormDataString = typeof formData.description !== "string";
+
+    if (!isValueANumber || isFormDataString || isValueANumber < 0) {
+      return;
     }
+
     setDisableForm(true);
 
     try {
@@ -95,7 +83,20 @@ export default function Wallet() {
       });
       setDisableForm(false);
     } catch (error) {
-      alert(error.response.data);
+      if (error.response.status === 422) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'A descrição não deve conter caracteres especiais!',
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+        })
+      }
+
       setDisableForm(false);
     }
   }
@@ -114,6 +115,8 @@ export default function Wallet() {
             name="value"
             onChange={handleChange}
             value={formData.value}
+            min="1"
+            autoComplete="off"
             required
             disabled={disableForm}
           />
@@ -123,6 +126,7 @@ export default function Wallet() {
             name="description"
             onChange={handleChange}
             value={formData.description}
+            autoComplete="off"
             required
             disabled={disableForm}
           />

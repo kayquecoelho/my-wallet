@@ -5,23 +5,35 @@ import AuthContext from "../../contexts/AuthContext";
 import { Container, Form, Input, StyledLink, Button, Loading } from "../../components/FormComponents";
 import api from "../../services/api";
 import Logo from "../../assets/logo.svg";
+import Swal from "sweetalert2";
 
 export default function Login() {
-  const { setAndPersistToken, setToken } = useContext(AuthContext);
+  const { setAndPersistToken } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [disableForm, setDisableForm] = useState(false);
   const navigate = useNavigate();
-  const localData = localStorage.getItem("token");
-
+  const localToken = localStorage.getItem("token");
+  
   useEffect(() => {
-    if (localData) {
-      setToken(JSON.parse(localData));
+    if (localToken) {
       navigate("/wallet");
     }
-  }, []);
+  }, [localToken, navigate]);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -30,11 +42,27 @@ export default function Login() {
     const promise = api.signIn({ ...formData });
 
     promise.then((response) => {
+      Toast.fire({
+        icon: 'success',
+        title: 'Você está logado!'
+      })
       setAndPersistToken(response.data);
       navigate("/wallet");
     });
-    promise.catch((error) => {
-      alert(error.response.data);
+    promise.catch(({ response }) => {
+      if (response.status === 401){
+        Swal.fire({
+          icon: 'error',
+          text: "Email e/ou senha incorretos!",
+        })
+      } else {
+        Toast.fire({
+          icon: 'error',
+          title: 'Oops..!',
+          text: 'Estamos com problemas! Tente novamente mais tarde'
+        })
+      }
+      
       setDisableForm(false);
     });
   }
@@ -54,6 +82,8 @@ export default function Login() {
           onChange={handleChange}
           value={formData.email}
           disabled={disableForm}
+          autoComplete="off"
+          autoFocus
           required
         />
         <Input
@@ -63,11 +93,11 @@ export default function Login() {
           onChange={handleChange}
           value={formData.password}
           disabled={disableForm}
+          autoComplete="off"
           required
         />
         <Button type="submit" disabled={disableForm}>
-          {!disableForm && "Entrar"}
-          {disableForm && <Loading></Loading>}
+          {disableForm ? <Loading /> : "Entrar"}
         </Button>
       </Form>
 

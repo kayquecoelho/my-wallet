@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import AuthContext from "../../../contexts/AuthContext";
 import api from "../../../services/api";
+import Swal from "sweetalert2";
 
 import { Balance, Date, Description, Name, Operation, Total, Value } from "./style";
 
 export function BankBalance({ balance }) {
   const title = balance.toString().replace(".", ",");
+
   return (
     <Balance>
       <span>SALDO</span>
@@ -31,18 +33,25 @@ export function Transaction({
   const { token } = useContext(AuthContext);
   const formatedDate = `${arrDate[0]}/${arrDate[1]}`;
 
-  async function requestToDelete(id) {
-    const wantToDelete = window.confirm(
-      "Tem certeza que deseja deletar a transação?"
-    );
-    if (wantToDelete) {
-      try {
-        await api.deleteTransaction(token.token, id);
-        setIsDeleted(!isDeleted);
-      } catch (error) {
-        alert(error.response.data);
+  function requestToDelete(id) {
+    Swal.fire({
+      title: 'Tem certeza que deseja deletar a transação?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: "Cancelar"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await api.deleteTransaction(token.token, id);
+          setIsDeleted(!isDeleted);
+        } catch (error) {
+          alert(error.response.data);
+        }
       }
-    }
+    });
   }
 
   function updateOperation(id) {
