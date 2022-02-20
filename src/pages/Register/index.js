@@ -18,9 +18,9 @@ export default function Register() {
 
   const Toast = Swal.mixin({
     toast: true,
-    position: 'top-center',
+    position: 'top',
     showConfirmButton: false,
-    timer: 3000,
+    timer: 1500,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -88,6 +88,8 @@ export default function Register() {
           value={formData.name}
           disabled={disableForm}
           autoComplete="off"
+          title="O nome deve ter no minímo 3 letras. Caracteres especiais não são permitidos"
+          pattern="^[a-zA-Z\s]{3,}$"
           autoFocus
           required
         />
@@ -108,6 +110,8 @@ export default function Register() {
           onChange={handleChange}
           value={formData.password}
           disabled={disableForm}
+          title="A senha deve ter no mínimo 3 caracteres, sem caracteres especiais"
+          pattern="^[a-zA-Z0-9]{3,}$"
           autoComplete="off"
           required
         />
@@ -118,6 +122,8 @@ export default function Register() {
           onChange={handleChange}
           value={formData.confirmPassword}
           disabled={disableForm}
+          title="As senhas devem coincidir"
+          pattern={formData.password}
           autoComplete="off"
           required
         />

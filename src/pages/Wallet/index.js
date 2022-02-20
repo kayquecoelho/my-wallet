@@ -4,8 +4,21 @@ import AuthContext from "../../contexts/AuthContext";
 import api from "../../services/api";
 import Swal from "sweetalert2";
 
-import { ButtonWallet, Navigation, Statement, Title, Subtitle, ContainerWallet } from "./style";
-import { Button, Container, Form, Input, Loading } from "../../components/FormComponents";
+import {
+  ButtonWallet,
+  Navigation,
+  Statement,
+  Title,
+  Subtitle,
+  ContainerWallet,
+} from "./style";
+import {
+  Button,
+  Container,
+  Form,
+  Input,
+  Loading,
+} from "../../components/FormComponents";
 import { BankBalance, Transaction } from "./Statement";
 
 export default function Wallet() {
@@ -38,8 +51,10 @@ export default function Wallet() {
 
       setBalance(balanceBank);
     });
-    promise.catch(() => navigate("/"));
-    
+    promise.catch(() => {
+      localStorage.removeItem("token");
+      navigate("/");
+    });
   }, [screen, isDeleted, navigate, token]);
 
   function changeToInput(type) {
@@ -85,16 +100,16 @@ export default function Wallet() {
     } catch (error) {
       if (error.response.status === 422) {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'A descrição não deve conter caracteres especiais!',
-        })
+          icon: "error",
+          title: "Oops...",
+          text: "A descrição não deve conter caracteres especiais!",
+        });
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Something went wrong!',
-        })
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
       }
 
       setDisableForm(false);
@@ -116,6 +131,8 @@ export default function Wallet() {
             onChange={handleChange}
             value={formData.value}
             min="1"
+            step="0.01"
+            max="1000000"
             autoComplete="off"
             required
             disabled={disableForm}
@@ -127,6 +144,7 @@ export default function Wallet() {
             onChange={handleChange}
             value={formData.description}
             autoComplete="off"
+            pattern="^[a-zA-Z\s]{3,}$"
             required
             disabled={disableForm}
           />

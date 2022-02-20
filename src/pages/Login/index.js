@@ -27,7 +27,7 @@ export default function Login() {
     toast: true,
     position: 'top',
     showConfirmButton: false,
-    timer: 2000,
+    timer: 1200,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)

@@ -2,11 +2,23 @@
 
 My Wallet is an application for managing your financial life
 
-Try it out now: <a href="cineflex-coral.vercel.app">cineflex-coral.vercel.app</a>
+Try it out now: <a href="my-wallet-iota.vercel.app">my-wallet-iota.vercel.app</a>
+
+<img src="./src/assets/my-wallet.gif">
+
+<br>
 
 # About
 
+It's a web application designed for mobile devices. You can easily create an account and start to manage your financial life.
 
+Features:
+
+- [X] Add new transactions
+- [X] See your current Balance
+- [X] List all of your transactions
+- [X] Edit the amount of either a deposit or a withdraw
+- [X] Delete any transaction
 
 # Technologies
 
